@@ -2,17 +2,19 @@ jQuery(document).ready(function($) {
 	banderHeight();
 	sidebarButton();
 	parallax();
+	buttonColorSwitcher();
 
 	$(window).resize(function() {
 		banderHeight();
 	});
 
-	$('.customScroll').scroll(function() {
+	$(document).scroll(function() {
 		parallax();
+		buttonColorSwitcher();
 	});
 
 	function parallax(){
-		var scrolled = $('.customScroll').scrollTop();
+		var scrolled = $(document).scrollTop();
 	    if ($(window).width() > 960) {
 			$('#header').css('background-position-y', (scrolled*0.5)+'px');
 		};
@@ -28,6 +30,19 @@ jQuery(document).ready(function($) {
 			$(this).toggleClass('active');
 			$('.leftSidebar').toggleClass('open');
 		});
+	}
+
+	function buttonColorSwitcher(){
+		var aboutPosition = $('#aboutMe').offset().top;
+		var scrolled = $('.customScroll').scrollTop();
+
+		if(scrolled > aboutPosition){
+			$('.sidebarButton').addClass('black');
+		}
+
+		else{			
+			$('.sidebarButton').removeClass('black');
+		}
 	}
 });
 function printed_el_text( el ){

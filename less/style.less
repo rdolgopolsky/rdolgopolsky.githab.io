@@ -38,8 +38,7 @@ html, body{
 	font-family: 'Ubuntu', sans-serif;
 	color: #000;
 	background-color: #282923;
-}
-.customScroll{
+	max-width: 100%;	
 	overflow: overlay;
 	&::-webkit-scrollbar {
 	    width: 5px;
@@ -60,7 +59,6 @@ html, body{
 		}
 	}
 }
-
 
 .red{
 	color: #f92472;
@@ -111,7 +109,6 @@ h3{
 	margin-bottom: 10px;
 }
 
-
 .wrapper{
 	max-width: 100%;
 	width: 768px;
@@ -132,7 +129,7 @@ h3{
 .sidebarButton{
 	width: 30px;
 	height: 30px;
-	position: absolute;
+	position: fixed;
 	top: 20px;
 	left: 20px;
 	z-index: 100;
@@ -200,27 +197,22 @@ h3{
 
 .leftSidebar{
 	width: 320px;
-	position: absolute;
+	position: fixed;
 	bottom: 0;
 	left: -320px;
 	top: 0;
 	background-color: #ebedef;
 	.tr(.3s);
 	box-shadow: inset -5px -2px 15px rgba(0,0,0,.5);
+	z-index: 1050;
 
 	&.open{
 		left: 0;
-		&~.content{
-			left: 320px;
-		}
 	}
 }
 .content{
-	position: absolute;
-	bottom: 0;
-	left: 0;
-	right: 0;
-	top: 0;
+	float: left;
+	width: 100%;
 	.tr(.3s);
 }
 .header{
