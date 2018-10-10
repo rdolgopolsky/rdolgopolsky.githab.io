@@ -1,4 +1,5 @@
 jQuery(document).ready(function($) {
+	var portfolioPosition;
 	banderHeight();
 	sidebarButton();
 	parallax();
@@ -8,21 +9,29 @@ jQuery(document).ready(function($) {
 		banderHeight();
 	});
 
-	$(document).scroll(function() {
+	$('body').scroll(function() {
 		parallax();
 		buttonColorSwitcher();
 	});
 
 	function parallax(){
-		var scrolled = $(document).scrollTop();
+		var scrolled = $('body').scrollTop();
+		var portfolioHeight = $('#portfolio').height()/2;
+
 	    if ($(window).width() > 960) {
 			$('#header').css('background-position-y', (scrolled*0.5)+'px');
 		};
+
+		if (scrolled > portfolioPosition+portfolioHeight) {
+			$('#portfolio').css('top', ((scrolled-(portfolioPosition+portfolioHeight))*0.5)+'px');
+		}
 	}
 
 	function banderHeight(){	
 		var wh = $(window).height();
 		$('#header').css('height', wh);
+		portfolioPosition = $('#portfolio').offset().top;
+		return portfolioPosition;
 	}
 
 	function sidebarButton(){	
@@ -33,10 +42,9 @@ jQuery(document).ready(function($) {
 	}
 
 	function buttonColorSwitcher(){
-		var aboutPosition = $('#aboutMe').offset().top;
-		var scrolled = $('.customScroll').scrollTop();
+		var scrolled = $('body').scrollTop();
 
-		if(scrolled > aboutPosition){
+		if(scrolled > portfolioPosition){
 			$('.sidebarButton').addClass('black');
 		}
 
