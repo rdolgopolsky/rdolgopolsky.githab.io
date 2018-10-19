@@ -40,7 +40,7 @@ gulp.task('scripts', function(){
 });
 
 gulp.task('clean', function () {
-	return del.sync('dist');
+	return del.sync('test');
 })
 
 gulp.task('clear', function () {
@@ -55,7 +55,7 @@ gulp.task('img', function(){
 		svgoPlugins: [{removeViewBox: false}],
 		une: [pngquant()]
 	})))
-	.pipe(gulp.dest('dist/img'));
+	.pipe(gulp.dest('test/img'));
 });
 
 gulp.task('watch', ['browser-sync', 'sass', 'scripts'], function () {
@@ -66,16 +66,16 @@ gulp.task('watch', ['browser-sync', 'sass', 'scripts'], function () {
 
 gulp.task('build', ['clean', 'sass', 'scripts', 'img'], function () {
 	var buildCss = gulp.src('app/css/**/*')
-	.pipe(gulp.dest('dist/css'));
+	.pipe(gulp.dest('test/css'));
 
 	var buildFonts = gulp.src('app/fonts/**/*')
-	.pipe(gulp.dest('dist/fonts'));
+	.pipe(gulp.dest('test/fonts'));
 
 	var buildJs = gulp.src('app/js/**/*')
-	.pipe(gulp.dest('dist/js'));
+	.pipe(gulp.dest('test/js'));
 
 	var buildHtml = gulp.src('app/*.html')
-	.pipe(gulp.dest('dist'));
+	.pipe(gulp.dest('test'));
 });
 
 gulp.task('ticker', function () {
