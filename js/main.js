@@ -1,69 +1,165 @@
 jQuery(document).ready(function($) {
-	var portfolioPosition;
-	banderHeight();
-	sidebarButton();
-	parallax();
-	buttonColorSwitcher();
+	var coin = ['ETH', 'LTC', 'BTC'];
+	var curVal = $("#currency-list option:selected").val();
 
-	$(window).resize(function() {
-		banderHeight();
-	});
+	w3cSelect(coin);
+	parserPrice(curVal, coin);	
 
-	$('body').scroll(function() {
-		parallax();
-		buttonColorSwitcher();
-	});
+	chekboxUpdate();
 
-	function parallax(){
-		var scrolled = $('body').scrollTop();
-		var portfolioHeight = $('#portfolio').height()/2;
+	function parserPrice(curVal, coin){
+		for (let i=0; i<coin.length; i++) {
+			$.ajax({ 
+				url: 'https://apiv2.bitcoinaverage.com/indices/global/ticker/' + coin[i] + curVal,
+				dataType: 'json',
+				success: function (data) { 
+					var price = data.changes.price,
+						percent = data.changes.percent,
+						ask = data.ask;
 
-	    if ($(window).width() > 960) {
-			$('#header').css('background-position-y', (scrolled*0.5)+'px');
-		};
+						updateInfo(price, percent, ask, i, coin);
+				}, 
 
-		if (scrolled > portfolioPosition+portfolioHeight) {
-			$('#portfolio').css('top', ((scrolled-(portfolioPosition+portfolioHeight))*0.5)+'px');
-		}
+				error: function (jqXHR, exception) { 
+					console.log('error');
+				}
+			}); 
+		}; 
+
 	}
 
-	function banderHeight(){	
-		var wh = $(window).height();
-		$('#header').css('height', wh);
-		portfolioPosition = $('#portfolio').offset().top;
-		return portfolioPosition;
-	}
+	function chekboxUpdate() {
+		$('.percentChange .fakeCheckbox').each(function() {
+			$(this).click(function() {
+				curVal = $(".select-selected").text();
+				coin = [$(this).parents('.coin').attr('id')];
 
-	function sidebarButton(){	
-		$('.sidebarButton').click(function() {
-			$(this).toggleClass('active');
-			$('.leftSidebar').toggleClass('open');
+				$(this).toggleClass('checked');
+
+				parserPrice(curVal, coin);
+			});
 		});
 	}
 
-	function buttonColorSwitcher(){
-		var scrolled = $('body').scrollTop();
 
-		if(scrolled > portfolioPosition){
-			$('.sidebarButton').addClass('black');
+	function updateInfo(price, percent, ask, i, coin) {
+		var ask = String(ask),
+			hourPer = String(percent.hour),
+			dayPer = String(percent.day),
+			weekPer = String(percent.week),
+			monthPer = String(percent.month),
+
+			hourPr = String(price.hour),
+			dayPr = String(price.day),
+			weekPr = String(price.week),
+			monthPr = String(price.month);
+
+		if ($('#'+coin[i]+' .fakeCheckbox').hasClass('checked')) {
+
+			var coin = new Vue({
+			  el: '#'+coin[i],
+			  data: {
+			  	ask: ask,
+			    hour: hourPer,
+			    day: dayPer,
+				week: weekPer,
+				month: monthPer,
+			  }
+			})
+			chekboxUpdate();
 		}
 
-		else{			
-			$('.sidebarButton').removeClass('black');
+		else{
+			var coin = new Vue({
+			  el: '#'+coin[i],
+			  data: {
+			  	ask: String(ask),
+			    hour: hourPr,
+			    day: dayPr,
+				week: weekPr,
+				month: monthPr,
+			  }
+			})
+			chekboxUpdate();
 		}
 	}
-});
-function printed_el_text( el ){
-	var text = el.innerHTML,
-		i = 0,
-		__print = function (){
-			i++;
-			if( i <= text.length ){
-				el.innerHTML = text.substr(0, i);
-				setTimeout( __print, 20 );
-			}
-		};
-		__print();
-};
 
-printed_el_text( document.getElementById("type_text") );
+
+	function w3cSelect(coin) {
+		var x, i, j, selElmnt, a, b, c;
+		/*look for any elements with the class "custom-select":*/
+		x = document.getElementsByClassName("custom-select");
+		for (i = 0; i < x.length; i++) {
+		  selElmnt = x[i].getElementsByTagName("select")[0];
+		  /*for each element, create a new DIV that will act as the selected item:*/
+		  a = document.createElement("DIV");
+		  a.setAttribute("class", "select-selected");
+		  a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
+		  x[i].appendChild(a);
+		  /*for each element, create a new DIV that will contain the option list:*/
+		  b = document.createElement("DIV");
+		  b.setAttribute("class", "select-items select-hide");
+		  for (j = 0; j < selElmnt.length; j++) {
+		    /*for each option in the original select element,
+		    create a new DIV that will act as an option item:*/
+		    c = document.createElement("DIV");
+		    c.innerHTML = selElmnt.options[j].innerHTML;
+		    c.addEventListener("click", function(e) {
+		        /*when an item is clicked, update the original select box,
+		        and the selected item:*/
+		        var y, i, k, s, h;
+		        s = this.parentNode.parentNode.getElementsByTagName("select")[0];
+		        h = this.parentNode.previousSibling;
+		        for (i = 0; i < s.length; i++) {
+		          if (s.options[i].innerHTML == this.innerHTML) {
+		            s.selectedIndex = i;
+		            h.innerHTML = this.innerHTML;
+		            y = this.parentNode.getElementsByClassName("same-as-selected");
+		            for (k = 0; k < y.length; k++) {
+		              y[k].removeAttribute("class");
+		            }
+		            this.setAttribute("class", "same-as-selected");
+
+		            parserPrice(h.innerHTML, coin);
+
+		            break;
+		          }
+		        }
+		        h.click();
+		    });
+		    b.appendChild(c);
+		  }
+		  x[i].appendChild(b);
+		  a.addEventListener("click", function(e) {
+		      /*when the select box is clicked, close any other select boxes,
+		      and open/close the current select box:*/
+		      e.stopPropagation();
+		      closeAllSelect(this);
+		      this.nextSibling.classList.toggle("select-hide");
+		      this.classList.toggle("select-arrow-active");
+		    });
+		}
+		function closeAllSelect(elmnt) {
+		  /*a function that will close all select boxes in the document,
+		  except the current select box:*/
+		  var x, y, i, arrNo = [];
+		  x = document.getElementsByClassName("select-items");
+		  y = document.getElementsByClassName("select-selected");
+		  for (i = 0; i < y.length; i++) {
+		    if (elmnt == y[i]) {
+		      arrNo.push(i)
+		    } else {
+		      y[i].classList.remove("select-arrow-active");
+		    }
+		  }
+		  for (i = 0; i < x.length; i++) {
+		    if (arrNo.indexOf(i)) {
+		      x[i].classList.add("select-hide");
+		    }
+		  }
+		}
+		/*if the user clicks anywhere outside the select box,
+		then close all select boxes:*/
+		document.addEventListener("click", closeAllSelect);
+	}
+});
