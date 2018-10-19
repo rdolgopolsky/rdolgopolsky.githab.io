@@ -43,44 +43,81 @@ jQuery(document).ready(function($) {
 
 
 	function updateInfo(price, percent, ask, i, coin) {
-		var ask = String(ask),
-			hourPer = String(percent.hour),
-			dayPer = String(percent.day),
-			weekPer = String(percent.week),
-			monthPer = String(percent.month),
-
-			hourPr = String(price.hour),
-			dayPr = String(price.day),
-			weekPr = String(price.week),
-			monthPr = String(price.month);
-
+		var ask = String(ask);
+		$('#'+coin[i]+' .price .value').html(ask);
 		if ($('#'+coin[i]+' .fakeCheckbox').hasClass('checked')) {
 
-			var coin = new Vue({
-			  el: '#'+coin[i],
-			  data: {
-			  	ask: ask,
-			    hour: hourPer,
-			    day: dayPer,
-				week: weekPer,
-				month: monthPer,
-			  }
-			})
-			chekboxUpdate();
-		}
+			var hour = String(percent.hour),
+				day = String(percent.day),
+				week = String(percent.week),
+				month = String(percent.month),
+				coin = $('#'+coin[i]).find('.info-block');
 
+			if (hour.indexOf('-') + 1) {
+				coin.find('.hour .value').html('<span class="minus">'+hour+'%</span>');
+			}
+			else{
+				coin.find('.hour .value').html('<span class="plus">+'+hour+'%</span>');
+			}
+
+			if (day.indexOf('-') + 1) {
+				coin.find('.day .value').html('<span class="minus">'+day+'%</span>');
+			}
+			else{
+				coin.find('.day .value').html('<span class="plus">+'+day+'%</span>');
+			}
+
+			if (week.indexOf('-') + 1) {
+				coin.find('.week .value').html('<span class="minus">'+week+'%</span>');
+			}			
+			else{
+				coin.find('.week .value').html('<span class="plus">+'+week+'%</span>');
+			}
+
+			if (month.indexOf('-') + 1) {
+				coin.find('.month .value').html('<span class="minus">'+month+'%</span>');
+			}
+			else{
+				coin.find('.month .value').html('<span class="plus">+'+month+'%</span>');
+			}
+
+		}
 		else{
-			var coin = new Vue({
-			  el: '#'+coin[i],
-			  data: {
-			  	ask: String(ask),
-			    hour: hourPr,
-			    day: dayPr,
-				week: weekPr,
-				month: monthPr,
-			  }
-			})
-			chekboxUpdate();
+
+			var hour = String(price.hour),
+				day = String(price.day),
+				week = String(price.week),
+				month = String(price.month),
+				coin = $('#'+coin[i]).find('.info-block');
+
+			if (hour.indexOf('-') + 1) {
+				coin.find('.hour .value').html('<span class="minus">'+hour+'</span>');
+			}
+			else{
+				coin.find('.hour .value').html('<span class="plus">+'+hour+'</span>');
+			}
+
+			if (day.indexOf('-') + 1) {
+				coin.find('.day .value').html('<span class="minus">'+day+'</span>');
+			}
+			else{
+				coin.find('.day .value').html('<span class="plus">+'+day+'</span>');
+			}
+
+			if (week.indexOf('-') + 1) {
+				coin.find('.week .value').html('<span class="minus">'+week+'</span>');
+			}			
+			else{
+				coin.find('.week .value').html('<span class="plus">+'+week+'</span>');
+			}
+
+			if (month.indexOf('-') + 1) {
+				coin.find('.month .value').html('<span class="minus">'+month+'</span>');
+			}
+			else{
+				coin.find('.month .value').html('<span class="plus">+'+month+'</span>');
+			}
+
 		}
 	}
 
