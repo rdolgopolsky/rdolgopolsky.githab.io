@@ -2,7 +2,7 @@ jQuery(document).ready(function ($) {
 	var portfolioPosition;
 	banderHeight();
 	sidebarButton();
-	parallax();
+	parallaxJS();
 	buttonColorSwitcher();
 
 	$(window).resize(function () {
@@ -10,11 +10,19 @@ jQuery(document).ready(function ($) {
 	});
 
 	$("body").scroll(function () {
+<<<<<<< HEAD
 		parallax();
 		buttonColorSwitcher();
 	});
 
 	function parallax() {
+=======
+		parallaxJS();
+		buttonColorSwitcher();
+	});
+
+	function parallaxJS() {
+>>>>>>> jsChanges
 		var scrolled = $("body").scrollTop();
 		var portfolioHeight = $("#portfolio").height() / 2;
 
@@ -57,6 +65,7 @@ jQuery(document).ready(function ($) {
 function printed_el_text(el) {
 	var text = el.innerHTML,
 		i = 0,
+<<<<<<< HEAD
 		pringJS = function () {
 			i++;
 			if (i <= text.length) {
@@ -65,6 +74,16 @@ function printed_el_text(el) {
 			}
 		};
 	pringJS();
+=======
+		printText = function () {
+			i++;
+			if (i <= text.length) {
+				el.innerHTML = text.substr(0, i);
+				setTimeout(printText, 20);
+			}
+		};
+	printText();
+>>>>>>> jsChanges
 }
 
 printed_el_text(document.getElementById("type_text"));
