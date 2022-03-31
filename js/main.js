@@ -2,7 +2,7 @@ jQuery(document).ready(function ($) {
 	var portfolioPosition;
 	banderHeight();
 	sidebarButton();
-	parallax();
+	parallaxJS();
 	buttonColorSwitcher();
 
 	$(window).resize(function () {
@@ -10,11 +10,11 @@ jQuery(document).ready(function ($) {
 	});
 
 	$("body").scroll(function () {
-		parallax();
+		parallaxJS();
 		buttonColorSwitcher();
 	});
 
-	function parallax() {
+	function parallaxJS() {
 		var scrolled = $("body").scrollTop();
 		var portfolioHeight = $("#portfolio").height() / 2;
 
